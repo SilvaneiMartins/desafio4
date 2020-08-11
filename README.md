@@ -7,6 +7,7 @@
 <p align="center">
   <a href="#rocket-tecnologias">Tecnologias</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#information_source-como-usar">Como Usar</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#fire-executar">Executar</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#page_with_curl-contato">Contato</a>
 </p>
 
@@ -31,7 +32,7 @@ Eu utizei as tecnologias logo abaixo:
 -  [Axios](https://github.com/axios/axios)
 
 
-## :information_source-como-usar: Como Usasr
+## :information_source: Como usar
 
 Para clonar e executar esta aplicação, você precisa do [Github](https://git-scm.com) e [Yarn](https://yarnpkg.com/) ou maior instalados. Comandos:
 
