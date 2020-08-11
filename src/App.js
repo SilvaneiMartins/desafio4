@@ -1,134 +1,131 @@
-/*
-* Desenvolvedor: Silvanei Martins;
-* Email: silvaneimartins_rcc@hotmail.com;
-* WhatsApp: (69) 9.8405-2620;  
-* Desafio 04: Conceitos do React Native;
-*/
-import React, { useEffect, useState } from "react";
-
+import React, { useState, useEffect } from "react";
 import api from './services/api';
 
 import {
-   SafeAreaView,
-   View,
-   FlatList,
-   Text,
-   StatusBar,
-   StyleSheet,
-   TouchableOpacity,
+  SafeAreaView,
+  View,
+  FlatList,
+  Text,
+  StatusBar,
+  StyleSheet,
+  TouchableOpacity,
 } from "react-native";
 
 export default function App() {
-   const [repositories, setRepositories] = useState([]);
+  const [repositories, setRepositories] = useState([]);
 
-   useEffect(() => {
-      api.get('repositories').then(response => setRepositories(response.data));
-   }, []);
+  useEffect(() => {
+    api.get('repositories').then(response => {
+      setRepositories(response.data);
+    })
+  }, []);
 
-   async function handleLikeRepository(id) {
-      const response = await api.post(`repositories/${id}/like`);
-      const repositoryIndex = repositories.findIndex(
-         repository => repository.id === id
-      );
-      if (repositoryIndex >= 0) {
-         repositories[repositoryIndex] = response.data;
-         setRepositories([...repositories]);
+  async function handleLikeRepository(id) {
+    const response = await api.post(`repositories/${id}/like`);
+
+    const likedRepository = response.data;
+
+    const repositoriesUpdated = repositories.map(repository => {
+      if (repository.id === id) {
+        return likedRepository;
+      } else {
+        return repository;
       }
-      return response.data.likes;
-   }
+    });
 
-   return (
-      <>
-         <StatusBar barStyle="light-content" backgroundColor="#7159c1" />
-         <SafeAreaView style={styles.container}>
-            <FlatList
-               data={repositories}
-               keyExtractor={(repository) => repository.id}
-               renderItem={({ item: repository }) => (
-                  <View style={styles.repositoryContainer}>
-                     <Text style={styles.repository}>{repository.title}</Text>
+    setRepositories(repositoriesUpdated);
+  }
 
-                     <View style={styles.techsContainer}>
-                        {repository.techs.map((tech, index) => (
-                           <Text
-                              key={index}
-                              style={styles.tech}>
-                              {tech}
-                           </Text>
-                        ))}
-                     </View>
+  return (
+    <>
+      <StatusBar barStyle="light-content" backgroundColor="#7159c1" />
+      <SafeAreaView style={styles.container}>
+        <FlatList 
+          data={repositories}
+          keyExtractor={repository => repository.id}
+          renderItem={({ item: repository }) => (
+            <View style={styles.repositoryContainer}>
+              <Text style={styles.repository}>{repository.title}</Text>
 
-                     <View style={styles.likesContainer}>
-                        <Text
-                           style={styles.likeText}
-                           testID={`repository-likes-${repository.id}`}
-                        >
-                           {repository.likes} Curtidas
-                        </Text>
-                     </View>
+              <View style={styles.techsContainer}>
+                {repository.techs.map(tech => (
+                  <Text key={tech} style={styles.tech}>
+                    {tech}
+                  </Text>
+                ))}
+              </View>
 
-                     <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => handleLikeRepository(repository.id)}
-                        testID={`like-button-${repository.id}`}
-                     >
-                        <Text style={styles.buttonText}>Curtir</Text>
-                     </TouchableOpacity>
-                  </View>
-               )}
-            />
-         </SafeAreaView>
-      </>
-   );
+              <View style={styles.likesContainer}>
+                <Text
+                  style={styles.likeText}
+                  testID={`repository-likes-${repository.id}`}
+                >
+                  {repository.likes} curtida{repository.likes > 1 ? 's' : ''}
+                </Text>
+              </View>
+
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => handleLikeRepository(repository.id)}
+                testID={`like-button-${repository.id}`}
+              >
+                <Text style={styles.buttonText}>Curtir</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        />
+      </SafeAreaView>
+    </>
+  );
 }
 
 const styles = StyleSheet.create({
-   container: {
-      flex: 1,
-      backgroundColor: "#7159c1",
-   },
-   repositoryContainer: {
-      marginBottom: 15,
-      marginHorizontal: 15,
-      backgroundColor: "#fff",
-      padding: 20,
-   },
-   repository: {
-      fontSize: 32,
-      fontWeight: "bold",
-   },
-   techsContainer: {
-      flexDirection: "row",
-      marginTop: 10,
-   },
-   tech: {
-      fontSize: 12,
-      fontWeight: "bold",
-      marginRight: 10,
-      backgroundColor: "#04d361",
-      paddingHorizontal: 10,
-      paddingVertical: 5,
-      color: "#fff",
-   },
-   likesContainer: {
-      marginTop: 15,
-      flexDirection: "row",
-      justifyContent: "space-between",
-   },
-   likeText: {
-      fontSize: 14,
-      fontWeight: "bold",
-      marginRight: 10,
-   },
-   button: {
-      marginTop: 10,
-   },
-   buttonText: {
-      fontSize: 14,
-      fontWeight: "bold",
-      marginRight: 10,
-      color: "#fff",
-      backgroundColor: "#7159c1",
-      padding: 15,
-   },
+  container: {
+    flex: 1,
+    backgroundColor: "#7159c1",
+  },
+  repositoryContainer: {
+    marginBottom: 15,
+    marginHorizontal: 15,
+    backgroundColor: "#fff",
+    padding: 20,
+  },
+  repository: {
+    fontSize: 32,
+    fontWeight: "bold",
+  },
+  techsContainer: {
+    flexDirection: "row",
+    marginTop: 10,
+  },
+  tech: {
+    fontSize: 12,
+    fontWeight: "bold",
+    marginRight: 10,
+    backgroundColor: "#04d361",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    color: "#fff",
+  },
+  likesContainer: {
+    marginTop: 15,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  likeText: {
+    fontSize: 14,
+    fontWeight: "bold",
+    marginRight: 10,
+  },
+  button: {
+    marginTop: 10,
+  },
+  buttonText: {
+    fontSize: 14,
+    fontWeight: "bold",
+    marginRight: 10,
+    color: "#fff",
+    backgroundColor: "#7159c1",
+    padding: 15,
+  },
 });
