@@ -31,7 +31,7 @@ Eu utizei as tecnologias logo abaixo:
 -  [Axios](https://github.com/axios/axios)
 
 
-## :fire-executar: Executar
+## :information_source-como-usar: Como Usasr
 
 Para clonar e executar esta aplicação, você precisa do [Github](https://git-scm.com) e [Yarn](https://yarnpkg.com/) ou maior instalados. Comandos:
 
